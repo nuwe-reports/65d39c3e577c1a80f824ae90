@@ -1,0 +1,15 @@
+FROM maven:latest AS test-stage
+
+COPY . /app
+
+WORKDIR /app
+
+RUN mvn test
+
+FROM maven:latest AS build-stage
+
+COPY --from=test-stage /app /app
+
+RUN mvn package
+
+EXPOSE 8080
